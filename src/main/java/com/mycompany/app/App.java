@@ -1,24 +1,78 @@
 package com.mycompany.app;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static spark.Spark.get;
+import static spark.Spark.port;
+import static spark.Spark.post;
+
+
+import spark.ModelAndView;
+import spark.template.mustache.MustacheTemplateEngine;
 
 public class App 
 {
-    //Returns the minimum number of swaps needed to sort an array of integers from 1 to the size of the array.
-    public static int minAmountOfSwapsToSort(ArrayList<Integer> array){
-        int amount = 0;
-        int i = 0;
-        if(array!=null && array.size()!=0){
-            while(i<array.size()-1){
-                if(array.get(i)==i+1)i++;
-                else{
-                    int tmp = array.get(i);
-                    array.set(i,array.get(array.get(i)-1));
-                    array.set(tmp-1,tmp);
-                    amount++;
-                }
+    //Checks if the sum of the first array plus index1 equals sum of the second array plus int2.
+    public static boolean isSumOfRangeEqual(ArrayList<Integer> array1, ArrayList<Integer> array2, int index1, int index2){
+        int sum1 = 0;int sum2=0;
+        if(array1!=null && array2!=null && array1.size()>index2 && array2.size()>index2 && index2>=index1 && index1>=0){
+            for(int i = index1;i<=index2;i++){
+                sum1+=array1.get(i);
+                sum2+=array1.get(i);
             }
+            return sum1==sum2;
         }
-        return amount;
+        return false;
+        
+    }
+    public static void main(String[] args) {
+        port(getHerokuAssignedPort());
+
+        get("/", (req, res) -> "Hello, World");
+
+        post("/compute", (req, res) -> {
+          //System.out.println(req.queryParams("input1"));
+          //System.out.println(req.queryParams("input2"));
+
+          String input1 = req.queryParams("input1");
+          java.util.Scanner sc1 = new java.util.Scanner(input1);
+          sc1.useDelimiter("[;\r\n]+");
+          java.util.ArrayList<Integer> inputList = new java.util.ArrayList<>();
+          while (sc1.hasNext())
+          {
+            int value = Integer.parseInt(sc1.next().replaceAll("\\s",""));
+            inputList.add(value);
+          }
+          System.out.println(inputList);
+
+
+          String input2 = req.queryParams("input2").replaceAll("\\s","");
+          int input2AsInt = Integer.parseInt(input2);
+
+          int  result = App.isSumOfRangeEqual(inputList);
+
+         Map map = new HashMap();
+          map.put("result", result);
+          return new ModelAndView(map, "compute.mustache");
+        }, new MustacheTemplateEngine());
+
+
+        get("/compute",
+            (rq, rs) -> {
+              Map map = new HashMap();
+              map.put("result", "not computed yet!");
+              return new ModelAndView(map, "compute.mustache");
+            },
+            new MustacheTemplateEngine());
+    }
+
+    static int getHerokuAssignedPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("PORT") != null) {
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+
     }
 }
