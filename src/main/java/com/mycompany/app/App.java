@@ -20,7 +20,7 @@ public class App
         if(array1!=null && array2!=null && array1.size()>index2 && array2.size()>index2 && index2>=index1 && index1>=0){
             for(int i = index1;i<=index2;i++){
                 sum1+=array1.get(i);
-                sum2+=array1.get(i);
+                sum2+=array2.get(i);
             }
             return sum1==sum2;
         }
@@ -87,6 +87,6 @@ public class App
         if (processBuilder.environment().get("PORT") != null) {
             return Integer.parseInt(processBuilder.environment().get("PORT"));
         }
-        return -1;
+        return 4567;
     }
 }

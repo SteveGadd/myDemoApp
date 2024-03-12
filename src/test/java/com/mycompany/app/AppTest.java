@@ -43,18 +43,22 @@ public class AppTest
         assertFalse(App.isSumOfRangeEqual(array1, array2, index1, index2));
     }
 
-    public void testSorted() {
+    public void testIndexRangeNotCorrect() {
         ArrayList<Integer> array1 = new ArrayList<>(Arrays.asList(2, 1, 3, 4));
         ArrayList<Integer> array2 = new ArrayList<>(Arrays.asList(1, 1, 3, 4));
-        int index1 = 0; int index2 = 3;
+        int index1 = 2; int index2 = 0;
         assertFalse(App.isSumOfRangeEqual(array1, array2, index1, index2));
     }
 
     public void testEmptyArray() {
-        ArrayList<Integer> array1 = new ArrayList<>(Arrays.asList(2, 1, 3, 4));
-        ArrayList<Integer> array2 = new ArrayList<>(Arrays.asList(1, 1, 3, 4));
+        ArrayList<Integer> array1 = new ArrayList<>(Arrays.asList());
+        ArrayList<Integer> array2 = new ArrayList<>(Arrays.asList());
         int index1 = 0; int index2 = 3;
         assertFalse(App.isSumOfRangeEqual(array1, array2, index1, index2));
+    }
+    public void testNull() {
+        int index1 = 0; int index2 = 3;
+        assertFalse(App.isSumOfRangeEqual(null, null, index1, index2));
     }
 
 }
